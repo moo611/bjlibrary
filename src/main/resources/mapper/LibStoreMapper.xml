@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.library.mapper.LibStoreMapper">
+
+    <resultMap type="com.example.library.domain.LibStore" id="LibStoreResult">
+        <result property="id"    column="id"    />
+        <result property="bookId"    column="book_id"    />
+        <result property="inStoreNum"    column="in_store_num"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="bookName" column="book_name"/>
+    </resultMap>
+
+    <sql id="selectLibStoreVo">
+        select id, book_id, in_store_num, del_flag, create_time, create_by, update_time, update_by from lib_store
+    </sql>
+
+    <select id="selectLibStoreList" parameterType="com.example.library.domain.LibStore" resultMap="LibStoreResult">
+        select a.id, a.book_id, a.in_store_num, a.create_time, b.name book_name from lib_store a
+        left join lib_book b on a.book_id = b.id
+        <where>
+            <if test="bookId != null "> and a.book_id = #{bookId}</if>
+            <if test="inStoreNum != null "> and a.in_store_num = #{inStoreNum}</if>
+        </where>
+        order by a.create_time desc
+    </select>
+
+    <select id="selectLibStoreById" parameterType="long" resultMap="LibStoreResult">
+        <include refid="selectLibStoreVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertLibStore" parameterType="com.example.library.domain.LibStore" useGeneratedKeys="true" keyProperty="id">
+        insert into lib_store
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">book_id,</if>
+            <if test="inStoreNum != null">in_store_num,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bookId != null">#{bookId},</if>
+            <if test="inStoreNum != null">#{inStoreNum},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateLibStore" parameterType="com.example.library.domain.LibStore">
+        update lib_store
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bookId != null">book_id = #{bookId},</if>
+            <if test="inStoreNum != null">in_store_num = #{inStoreNum},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLibStoreById" parameterType="long">
+        delete from lib_store where id = #{id}
+    </delete>
+
+    <delete id="deleteLibStoreByIds" parameterType="long">
+        delete from lib_store where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

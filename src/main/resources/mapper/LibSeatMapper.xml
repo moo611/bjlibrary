@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.library.mapper.LibSeatMapper">
+
+    <resultMap type="com.example.library.domain.LibSeat" id="LibSeatResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectLibSeatVo">
+        select id, code, status, del_flag, create_time, create_by, update_time, update_by from lib_seat
+    </sql>
+
+    <select id="selectLibSeatList" parameterType="com.example.library.domain.LibSeat" resultMap="LibSeatResult">
+        <include refid="selectLibSeatVo"/>
+        <where>del_flag='0'
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectLibSeatById" parameterType="long" resultMap="LibSeatResult">
+        <include refid="selectLibSeatVo"/>
+        where del_flag='0' and id = #{id}
+    </select>
+    <select id="selectLibSeatByCode" parameterType="string" resultMap="LibSeatResult">
+        <include refid="selectLibSeatVo"/>
+        where del_flag='0' and code = #{code}
+    </select>
+
+    <insert id="insertLibSeat" parameterType="com.example.library.domain.LibSeat" useGeneratedKeys="true" keyProperty="id">
+        insert into lib_seat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">code,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">#{code},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateLibSeat" parameterType="com.example.library.domain.LibSeat">
+        update lib_seat
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">code = #{code},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLibSeatById" parameterType="long">
+        update lib_seat set del_flag='2' where id = #{id}
+    </delete>
+
+    <delete id="deleteLibSeatByIds" parameterType="long">
+        update lib_seat set del_flag='2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

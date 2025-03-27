@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.library.mapper.LibSeatRecordMapper">
+
+    <resultMap type="com.example.library.domain.LibSeatRecord" id="LibSeatRecordResult">
+        <result property="id"    column="id"    />
+        <result property="seatId"    column="seat_id"    />
+        <result property="username"    column="username"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="code"    column="code"    />
+    </resultMap>
+
+    <sql id="selectLibSeatRecordVo">
+        select id, seat_id, username, start_time, end_time, del_flag, create_time, create_by, update_time, update_by, code from lib_seat_record
+    </sql>
+
+    <select id="selectLibSeatRecordList" parameterType="com.example.library.domain.LibSeatRecord" resultMap="LibSeatRecordResult">
+        <include refid="selectLibSeatRecordVo"/>
+        <where>del_flag='0'
+            <if test="seatId != null "> and seat_id = #{seatId}</if>
+            <if test="username != null  and username != ''"> and username = #{username}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+        </where>
+    </select>
+
+    <select id="selectLibSeatRecordById" parameterType="long" resultMap="LibSeatRecordResult">
+        <include refid="selectLibSeatRecordVo"/>
+        where del_flag='0' and id = #{id}
+    </select>
+
+    <insert id="insertLibSeatRecord" parameterType="com.example.library.domain.LibSeatRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into lib_seat_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="seatId != null">seat_id,</if>
+            <if test="username != null">username,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="code != null">code,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="seatId != null">#{seatId},</if>
+            <if test="username != null">#{username},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="code != null">#{code},</if>
+        </trim>
+    </insert>
+
+    <update id="updateLibSeatRecord" parameterType="com.example.library.domain.LibSeatRecord">
+        update lib_seat_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="seatId != null">seat_id = #{seatId},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="code != null">code = #{code},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLibSeatRecordById" parameterType="long">
+        update lib_seat_record set del_flag='2' where id = #{id}
+    </delete>
+
+    <delete id="deleteLibSeatRecordByIds" parameterType="long">
+        update lib_seat_record set del_flag='2' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

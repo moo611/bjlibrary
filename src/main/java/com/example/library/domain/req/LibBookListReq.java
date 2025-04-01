@@ -5,4 +5,7 @@ import lombok.Data;
 
 @Data
 public class LibBookListReq extends BaseReq {
+    String name;
+    String author;
+    String category;
 }

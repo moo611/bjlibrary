@@ -2,6 +2,9 @@ package com.example.library.domain;
 
 
 import com.example.library.domain.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 
 /**
  * 借阅对象 lib_borrow
@@ -50,6 +53,17 @@ public class LibBorrow extends BaseEntity
 
     /** 删除标识 */
     private String delFlag;
+
+    public Date getBackdate() {
+        return backdate;
+    }
+
+    public void setBackdate(Date backdate) {
+        this.backdate = backdate;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date backdate;
 
     public void setId(Long id)
     {

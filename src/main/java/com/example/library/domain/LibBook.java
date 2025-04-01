@@ -43,6 +43,16 @@ public class LibBook extends BaseEntity
     /** 删除标识 */
     private String delFlag;
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    private Double price;
+
     public void setId(Long id)
     {
         this.id = id;

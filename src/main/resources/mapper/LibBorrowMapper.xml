@@ -16,14 +16,15 @@
         <result property="updateBy"    column="update_by"    />
         <result property="bookName"    column="book_name"    />
         <result property="author"    column="author"    />
+        <result property="backdate"    column="backdate"    />
     </resultMap>
 
     <sql id="selectLibBorrowVo">
-        select id, book_id, username, status, del_flag, create_time, create_by, update_time, update_by from lib_borrow
+        select id, book_id, username, status, del_flag, create_time, create_by, update_time, update_by,backdate from lib_borrow
     </sql>
 
     <select id="selectLibBorrowList" parameterType="com.example.library.domain.LibBorrow" resultMap="LibBorrowResult">
-        select a.id, a.book_id, a.username, a.status, a.create_time, b.name book_name, b.author from lib_borrow a
+        select a.id, a.book_id, a.username, a.status, a.create_time, b.name book_name, b.author,a.backdate from lib_borrow a
         left join lib_book b on a.book_id = b.id
         <where>
             <if test="bookId != null "> and a.book_id = #{bookId}</if>
@@ -53,6 +54,7 @@
             <if test="createBy != null">create_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="updateBy != null">update_by,</if>
+            <if test="backdate != null">backdate,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bookId != null">#{bookId},</if>
@@ -63,6 +65,7 @@
             <if test="createBy != null">#{createBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
+            <if test="backdate != null">#{backdate},</if>
         </trim>
     </insert>
 
@@ -77,6 +80,7 @@
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="backdate != null">backdate = #{backdate},</if>
         </trim>
         where id = #{id}
     </update>
